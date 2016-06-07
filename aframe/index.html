@@ -1,0 +1,20 @@
+<html>
+  <head>
+    <script src="https://aframe.io/releases/0.2.0/aframe.min.js"></script>
+  </head>
+  <body>
+    <a-scene>
+      <a-assets>
+        <img id="cat" src="cat_drumming.gif">
+        <img id="cat2" src="cat_drumming.gif">
+        <video id="video" src="video.mp4" autoplay loop></video>
+      </a-assets>
+
+      <a-image src="#cat" width="10" height="5" position="-1 1.75 0" scale="0.075 0.23 0" crossorigin=""></a-image>
+      <a-image src="#cat2" width="10" height="5" position="-15 0 15" scale="0.075 0.23 0">
+        <a-animation attribute="position" dur="1000" fill="forwards" to="-13 0 13" repeat="indefinite"></a-animation>
+      </a-image>
+      <a-videosphere src="#video" rotation="0 180 0" ></a-videosphere>
+    </a-scene>
+  </body>
+</html>

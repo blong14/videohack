@@ -1,0 +1,110 @@
+<!doctype html>
+<html class="no-js" lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="jquery-2.2.4.min.js"></script>
+    <script src="http://threejs.org/build/three.min.js"></script>
+    <script src="http://threejs.org/examples/js/controls/TrackballControls.js"></script>
+    <script src="http://threejs.org/examples/js/Detector.js"></script>
+    <script src="http://threejs.org/examples/js/libs/stats.min.js"></script>
+  </head>
+  <body>
+
+    <section>
+      <div id="container"></div>
+    </section>
+
+    <script>
+      jQuery(document).ready(function () {
+        var width = jQuery(window).width() - 25;
+        var height = jQuery(window).height() - 25;
+
+        //create the scene
+        var scene = new THREE.Scene();
+        scene.position.set(0,0,0);
+        var container = document.getElementById("container");
+        
+        //create lights
+        var light = new THREE.AmbientLight( 0x404040 ); // soft white light
+        scene.add( light );
+        
+        var directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
+        directionalLight.position.set( 0, 10, 0 );
+        scene.add( directionalLight );
+        
+        //create cameras
+        var PerspectiveCamera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000000000 );
+        
+        //create renderer
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize( window.innerWidth, window.innerHeight );
+        container.appendChild( renderer.domElement );
+        renderer.setClearColor( 0xffffff );
+        
+        //create controls
+        controls = new THREE.TrackballControls( PerspectiveCamera,container );
+
+        controls.rotateSpeed = 10;
+        controls.zoomSpeed = 1;
+        controls.panSpeed = 1;
+
+        controls.noZoom = false;
+        controls.noPan = false;
+
+        controls.staticMoving = false;
+        controls.dynamicDampingFactor = 0.5;
+
+        controls.keys = [ 65, 83, 68 ];
+        PerspectiveCamera.position.z = 100;        
+
+        var geometry = new THREE.SphereGeometry( 500, 60, 40 );
+        geometry.scale( -1, 1, 1 );
+
+        var video = document.createElement( 'video' );
+        video.width = 500;
+        video.height = 500;
+        video.autoplay = true;
+        video.loop = true;
+        video.src = "video.mp4";
+
+        var texture = new THREE.VideoTexture( video );
+        texture.minFilter = THREE.LinearFilter;
+
+        var material   = new THREE.MeshBasicMaterial( { map : texture } );
+
+        mesh = new THREE.Mesh( geometry, material );
+
+        scene.add( mesh );
+
+        var geom = new THREE.PlaneGeometry( 100, 100, 0);
+        var mat = new THREE.MeshBasicMaterial({
+            map:THREE.ImageUtils.loadTexture('cat_drumming.gif'),
+            side: THREE.DoubleSide
+        });
+        mat.map.needsUpdate = true; //ADDED
+
+        var mesh = new THREE.Mesh(geom,mat);
+        mesh.position.set(115,-10,477);
+        mesh.rotation.x += .05;
+        mesh.rotation.y += .30;
+
+        scene.add(mesh);
+
+        function render() {
+            requestAnimationFrame( render );    
+            controls.update();
+            renderer.render(scene, PerspectiveCamera);
+        };
+
+        render();
+        renderer.setPixelRatio( window.devicePixelRatio );
+            renderer.setSize( width, height );
+        });
+    </script>
+
+  </body>
+</html>
